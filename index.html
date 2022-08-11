@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Saske</title>
+    <link rel="stylesheet" href="css/Player.css">
+    <link rel="stylesheet" href="css/Enemy.css">
+    <link rel="stylesheet" href="css/Weapon.css">
+    <link rel="stylesheet" href="css/World.css">
+</head>
+<body>
+    
+</body>
+</html>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="js/World.js"></script>
+<script src="js/Enemy.js"></script>
+<script src="js/Weapon.js"></script>
+<script src="js/Player.js"></script>
+
+
+<script>
+
+    let world = new World(1300, 700, "img/11.gif");
+    let peyne = new Enemy("акацуки", "Пейн");
+    let kirāBī = new Enemy("акацуки", "КираБи");
+    let hidan = new Enemy("акацуки", "Хидан");
+    //let shuriken = new Weapon("сюрикен");
+    //let kunai = new Weapon("кунай");
+    //let sword = new Weapon("меч");
+
+
+
+    let player = new Player("герой", "Саске");
+
+
+    document.onkeyup = function() {
+        if(event.keyCode == 37) {
+            player.goLeft();
+        }
+        if(event.keyCode == 38) {
+            player.goUp();
+        }
+        if(event.keyCode == 39) {
+            player.goRight();
+        }
+        if(event.keyCode == 40) {
+            player.goDown();
+        }
+        if(event.keyCode == 13) {
+            player.goSus();
+        }
+
+    }
+
+$.ajaxSetup({async : false})
+let update_id = 0;
+setInterval(function() {
+    this.dom = document.querySelector('.player');
+
+    let url = 'https://api.telegram.org/bot2032045068:AAHsshxISoorloJuintgCISdE8pbR-_A8r0/getUpdates?offset=' + update_id;
+
+    let data = $.get(url);
+    let dataArr = JSON.parse(data.responseText);
+    
+
+    for (num in dataArr['result']) {
+        let text = dataArr['result'][num]['message']['text'];
+        if (text == 'D') {
+            player.goRight();
+        }
+        if (text == 'A') {
+            player.goLeft() 
+        }
+        if (text == 'W') {
+            player.goUp();
+        }
+        if (text == 'S') {
+            player.goDown();
+        }
+        if (text == 'сусано') {
+            player.goSus();
+            this.dom.style.width = 200 + 'px';
+            this.dom.style.height = 240 + 'px';
+        }
+        if (text == "чидори") {
+            this.dom.style.backgroundImage = 'url("https://projets.rsight.net/clouds/lightning.gif")';
+            this.dom.style.width = 1000 + 'px';
+            this.dom.style.height = 700 + 'px'; 
+        }
+
+
+    update_id = dataArr['result'][num]['update_id'];
+    update_id = update_id + 1;
+}
+
+
+}, 300);
+</script>
